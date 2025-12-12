@@ -22,13 +22,21 @@ namespace ExamApp.Domain.Entities
         {
             if (Languages.ContainsKey(wordToChange))
             {
-                var temp = Languages[wordToChange];
+                var temp = Languages[wordToChange].ToList(); 
+
+                if (Languages.ContainsKey(change))
+                {
+                    temp.AddRange(Languages[change]);          
+                }
+
                 Languages.Remove(wordToChange);
-                AddTranslation(change, temp);
+                AddTranslation(change, temp.ToArray());
                 return true;
             }
             return false;
         }
+           
+        
 
         public bool RemoveWord(string key)
         {

@@ -5,14 +5,15 @@ namespace ExamApp.Domain.Entities
 {
     public static class DictionaryManager
     {
-        public static void SerealizeDictionaryInJson(MyDictionary myDictionary,string directory)
+        public static bool SerealizeDictionaryInJson(MyDictionary myDictionary,string directory)
         {
             if (!Directory.Exists(directory))
             {
-                throw new DirectoryNotFoundException("Directory is not founded");
+               return false;
             }
             string path = Path.Combine(directory, $"{myDictionary.TranslatingLanguages}_Dictionary.json");
             File.WriteAllText(path, JsonSerializer.Serialize(myDictionary));
+            return true;
         }
         public static MyDictionary DeserealizeDictionaryFromJson(string source)
         {

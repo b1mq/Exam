@@ -19,6 +19,7 @@
                 ("Change Translate of word", () => ChangeTranslating(myDictionary)),
                 ("Change Word of translating", () => ChangeWordTranslating(myDictionary)),
                 ("Display Dictionary", () => myDictionary.DisplayDictionary()),
+                ("Save Dictionary in JSON", () => SaveInJsonMenu( myDictionary)),
                 ("Exit", () => Environment.Exit(0))
             };
             while (true)
@@ -153,7 +154,7 @@
             }
         }
             public static void ChangeWordTranslating(MyDictionary myDictionary)
-        {
+      {   
             Console.WriteLine($"***Change translate of word   in {nameof(myDictionary)}***");
             while (true)
             {
@@ -177,11 +178,49 @@
                         {
                             Console.WriteLine("Original word does not contain in dictionary"); 
                         }
-                        else {
+                        else
+                        {
                             Console.WriteLine("Succesfully");
                         }
                     }
 
+                }
+            }
+        }
+        public static void SaveInJsonMenu(MyDictionary myDictionary)
+        {
+
+            Console.WriteLine($"***Save Dictionary:{nameof(myDictionary)} in JSON***");
+            while (true)
+            {
+                Console.WriteLine("Write path to save in file/or click ENTER to make it automaticly(or type '@' to finish) :");
+                string path = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    var result = DictionaryManager.SerealizeDictionaryInJson(myDictionary,path);
+                    if (!result)
+                    {
+                        Console.WriteLine("Directory is not founded"); 
+
+                    }
+                    else
+                    {
+                        Console.WriteLine($"File succesfully saved in {path}");
+                    }
+                }else
+                {
+                    var direct = Directory.GetCurrentDirectory();
+                    string AutomaticlyPath = Path.Combine(direct, $"{myDictionary.TranslatingLanguages}_Dictionary.json");
+                    var result = DictionaryManager.SerealizeDictionaryInJson(myDictionary, AutomaticlyPath);
+                    if (!result)
+                    {
+                        Console.WriteLine("Directory is not founded");
+
+                    }
+                    else
+                    {
+                        Console.WriteLine($"File succesfully automaticly saved in {AutomaticlyPath}");
+                    }
                 }
             }
         }

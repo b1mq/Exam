@@ -11,8 +11,13 @@ namespace ExamApp.Domain.Entities
             {
                return false;
             }
+            var options = new JsonSerializerOptions
+            {
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                WriteIndented = true
+            };
             string path = Path.Combine(directory, $"{myDictionary.TranslatingLanguages}_Dictionary.json");
-            File.WriteAllText(path, JsonSerializer.Serialize(myDictionary));
+            File.WriteAllText(path, JsonSerializer.Serialize(myDictionary,options));
             return true;
         }
         public static MyDictionary DeserealizeDictionaryFromJson(string source)

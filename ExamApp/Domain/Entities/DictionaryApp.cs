@@ -195,6 +195,8 @@
             {
                 Console.WriteLine("Write path to save in file/or click ENTER to make it automaticly(or type '@' to finish) :");
                 string path = Console.ReadLine();
+                if (path?.ToLower() == "@")
+                    break;
                 if (!string.IsNullOrWhiteSpace(path))
                 {
                     var result = DictionaryManager.SerealizeDictionaryInJson(myDictionary,path);
@@ -210,8 +212,8 @@
                 }else
                 {
                     var direct = Directory.GetCurrentDirectory();
-                    string AutomaticlyPath = Path.Combine(direct, $"{myDictionary.TranslatingLanguages}_Dictionary.json");
-                    var result = DictionaryManager.SerealizeDictionaryInJson(myDictionary, AutomaticlyPath);
+
+                    var result = DictionaryManager.SerealizeDictionaryInJson(myDictionary, direct);
                     if (!result)
                     {
                         Console.WriteLine("Directory is not founded");
@@ -219,7 +221,7 @@
                     }
                     else
                     {
-                        Console.WriteLine($"File succesfully automaticly saved in {AutomaticlyPath}");
+                        Console.WriteLine($"File succesfully automaticly saved in {direct}");
                     }
                 }
             }

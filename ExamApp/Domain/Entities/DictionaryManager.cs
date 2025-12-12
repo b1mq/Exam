@@ -5,6 +5,7 @@ namespace ExamApp.Domain.Entities
 {
     public static class DictionaryManager
     {
+
         public static bool SerealizeDictionaryInJson(MyDictionary myDictionary,string directory)
         {
             if (!Directory.Exists(directory))
@@ -24,19 +25,24 @@ namespace ExamApp.Domain.Entities
         {
             if (!File.Exists(source))
             {
-                throw new DirectoryNotFoundException("Directory is not founded");
+                return new MyDictionary { TranslatingLanguages = string.Empty };
             }
             var content = File.ReadAllText(source);
             if (string.IsNullOrWhiteSpace(content))
-                throw new ArgumentException("Source file is empty", nameof(source));
+                return new MyDictionary { TranslatingLanguages = string.Empty };
+            var options = new JsonSerializerOptions
+            {
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                WriteIndented = true
+            };
             try
             {
-                return JsonSerializer.Deserialize<MyDictionary>(content)?? throw new JsonException("Deserialized object is null");
+                return JsonSerializer.Deserialize<MyDictionary>(content,options)?? new MyDictionary { TranslatingLanguages = string.Empty };
             }
             catch (JsonException ex)
             {
 
-                throw new JsonException("Cannot serealize JSON file",ex);
+                return new MyDictionary { TranslatingLanguages = string.Empty };
             }
 
         }

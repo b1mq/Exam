@@ -1,4 +1,6 @@
-﻿namespace ExamApp.Domain.Entities
+﻿using System.IO;
+
+namespace ExamApp.Domain.Entities
 {
     public static class DictionaryApp
     {
@@ -20,6 +22,7 @@
                 ("Change Word of translating", () => ChangeWordTranslating(myDictionary)),
                 ("Display Dictionary", () => myDictionary.DisplayDictionary()),
                 ("Save Dictionary in JSON", () => SaveInJsonMenu( myDictionary)),
+                ("Load Dictionary from JSON", () => LoadDictionaryFromJSON( myDictionary)),
                 ("Exit", () => Environment.Exit(0))
             };
             while (true)
@@ -47,7 +50,7 @@
             {
                 Console.Write("Enter word (or type '@@' to finish): ");
                 string word = Console.ReadLine();
-                if (word?.ToLower() == "@@")
+                if (word?.Trim() == "@")
                     break;
 
                 List<string> translations = new List<string>();
@@ -76,7 +79,7 @@
             {
                 Console.Write("Enter word (or type '@' to finish): ");
                 string word = Console.ReadLine();
-                if (word?.ToLower() == "@")
+                if (word?.Trim() == "@")
                     break;
                 if (!string.IsNullOrWhiteSpace(word))
                 {
@@ -100,7 +103,7 @@
                 Console.Write("Enter word (or type '@' to finish): ");
                 Console.WriteLine();
                 string word = Console.ReadLine();
-                if (word?.ToLower() == "@")
+                if (word?.Trim() == "@")
                     break;
                 if (!string.IsNullOrWhiteSpace(word))
                 {
@@ -129,7 +132,7 @@
             {
                 Console.Write("Enter word to change his translate (or type '@' to finish)");
                 string word = Console.ReadLine();
-                if (word?.ToLower() == "@")
+                if (word?.Trim() == "@")
                     break;
 
                 if (!string.IsNullOrWhiteSpace(word))
@@ -160,7 +163,7 @@
             {
                 Console.Write("Enter word  to change (or type '@' to finish)");
                 string word = Console.ReadLine();
-                if (word?.ToLower() == "@")
+                if (word?.Trim() == "@")
                     break;
 
                 if (!string.IsNullOrWhiteSpace(word))
@@ -195,7 +198,7 @@
             {
                 Console.WriteLine("Write path to save in file/or click ENTER to make it automaticly(or type '@' to finish) :");
                 string path = Console.ReadLine();
-                if (path?.ToLower() == "@")
+                if (path?.Trim() == "@")
                     break;
                 if (!string.IsNullOrWhiteSpace(path))
                 {
@@ -209,7 +212,8 @@
                     {
                         Console.WriteLine($"File succesfully saved in {path}");
                     }
-                }else
+                }
+                else
                 {
                     var direct = Directory.GetCurrentDirectory();
 
@@ -223,6 +227,28 @@
                     {
                         Console.WriteLine($"File succesfully automaticly saved in {direct}");
                     }
+                }
+            }
+        }
+        public static MyDictionary LoadDictionaryFromJSON(MyDictionary myDictionary)
+        {
+            Console.WriteLine("***Load Dictionary from JSON***");
+
+            while (true)
+            {
+                Console.WriteLine("Write path (or type '@' to finish):");
+                string path = Console.ReadLine()?.Trim();
+
+                if (path == "@")
+                    return myDictionary;
+
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    return DictionaryManager.DeserealizeDictionaryFromJson(path);
+                }
+                else
+                {
+                    Console.WriteLine("Path is empty, try again.");
                 }
             }
         }

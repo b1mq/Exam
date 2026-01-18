@@ -2,25 +2,47 @@
 {
     public class QuizCollection
     {
+        // хранить count of questions
         public required string CollectionName {  get; set; }
         public required string CollectionType { get; init; }
         public List<Quiz> Quizzes { get; set; } = new List<Quiz>();
-        public void AddQuizToCollection(Quiz quiz)
+        public bool AddQuizToCollection(Quiz quiz)
         {
-            if(quiz.TypeOfQuiz == CollectionType) Quizzes.Add(quiz);
+            if (quiz.TypeOfQuiz == CollectionType)
+            {
+                Quizzes.Add(quiz);
+                return true;
+
+            }else
+            {
+                return false;
+            }
+         
         }
         public void CreateQuizInCollection(string QuizName, string Question, string[] Answers, int[] RightAnswer)
         {
             Quizzes.Add(new Quiz(QuizName, CollectionType ,Question, Answers, RightAnswer));
         }
-        public void RemoveQuizFromCollection(string QuizName) => Quizzes.RemoveAll(x => x.QuizName == QuizName);
-        public void RemoveQuizFromCollection(Quiz quiz) => Quizzes.Remove(quiz);
+        public bool RemoveQuizFromCollection(string QuizName)
+        {
+            try
+            {
+                Quizzes.RemoveAll(x => x.QuizName == QuizName);
+                return true;
+            }catch (ArgumentNullException ex)
+            {
+                return false;
+            }
+
+        }
+        public bool RemoveQuizFromCollection(Quiz quiz) => Quizzes.Remove(quiz);
         public Quiz GetQuiz(string QuizName) => Quizzes.FirstOrDefault(x => x.QuizName == QuizName);
 
-        public void ReplaceQuiz(Quiz quizReplace, Quiz newQuiz)
+        public void ReplaceQuiz(Quiz quizReplace, Quiz newQuiz) // придумать что то с логикой
         {
-            int index = Quizzes.IndexOf(quizReplace);
-            Quizzes[index] = newQuiz;
+              int index = Quizzes.IndexOf(quizReplace);
+              Quizzes[index] = newQuiz;
+
         }
 
     }
